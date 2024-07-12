@@ -1,0 +1,29 @@
+{
+  "name": "typescript-express-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "DOTENV_CONFIG_PATH=.test.env jest",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "http-status-codes": "^2.3.0",
+    "mysql2": "^3.10.2",
+    "sequelize": "^6.37.3"
+  }
+}
