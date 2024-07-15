@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model, Optional } from 'sequelize';
 import todoSequelize from "../setup/database";
 import { TodoAttributes } from "../../interfaces/db-models/TodoAttributes";
 
