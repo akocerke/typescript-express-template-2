@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import TodoModel from "../../database/models/TodoModel";
-import { IcreateBody, IcreateTodoBody, IdeleteBody, IdeleteTodoBody, ImarkBody, ImarkTodoBody, IupdateBody, IupdateTodoBody } from "../../interfaces/Routes/todos";
+import { IcreateTodoBody, IdeleteTodoBody, ImarkTodoBody, IupdateTodoBody } from "../../interfaces/Routes/todos";
 
 const TodosRouter = Router();
 
