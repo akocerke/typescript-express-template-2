@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import TodoModel from "../../database/models/TodoModel";
+import { IcreateBody, IdeleteBody, ImarkBody, IupdateBody } from "../../interfaces/Routes/todos";
 
 const TodosRouter = Router();
 
@@ -28,7 +29,7 @@ TodosRouter.get("/all", async (req, res) => {
 // PUT REQUESTS
 TodosRouter.put("/mark", async (req, res) => {
   try {
-    const { todoId, newIsDone } = req.body;
+    const { todoId, newIsDone } = req.body as ImarkBody;
 
     if (!todoId) throw Error("keine User Id");
 
@@ -41,7 +42,7 @@ TodosRouter.put("/mark", async (req, res) => {
 });
 
 TodosRouter.put("/update", async (req, res) => {
-  const { todoId, newTask, newIsDone, newDueDate } = req.body;
+  const { todoId, newTask, newIsDone, newDueDate } = req.body as IupdateBody;
 
   await TodoModel.update(
     {
@@ -57,7 +58,7 @@ TodosRouter.put("/update", async (req, res) => {
 
 // POST REQUESTS
 TodosRouter.post("/create", async (req, res) => {
-  const { newTask, newIsDone, newDueDate, newUserId } = req.body;
+  const { newTask, newIsDone, newDueDate, newUserId } = req.body as IcreateBody;
 
   console.log("Here we are", newTask, newIsDone, newDueDate, newUserId);
   if (!newTask || !newDueDate || !newUserId) {
@@ -78,7 +79,7 @@ TodosRouter.post("/create", async (req, res) => {
 
 // DELETE REQUEST
 TodosRouter.delete("/delete", async (req, res) => {
-  const { todoId } = req.body; //req.body.todoId
+  const { todoId } = req.body as IdeleteBody; 
 
   await TodoModel.destroy({ where: { id: todoId } });
 
