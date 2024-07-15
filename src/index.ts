@@ -1,5 +1,5 @@
-import todoSequelize from "./database/setup/database";
-import app from "./server";
+import todoSequelize from './database/setup/database';
+import app from './server';
 
 // Zugriff auf Umgebungsvariablen
 // const { PORT } = process.env;
@@ -8,9 +8,9 @@ const PORT = process.env.PORT;
 todoSequelize
   .sync()
   .then(() => {
-    console.log("DB has been successfully initialized");
+    console.log('DB has been successfully initialized');
   })
-  .catch((e) => {
+  .catch(e => {
     console.log(e);
   });
 

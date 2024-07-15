@@ -1,6 +1,6 @@
-import { DataTypes, Model } from "sequelize";
-import todoSequelize from "../setup/database";
-import { UserAttributes } from "../../interfaces/db-models/UserAttributes";
+import { DataTypes, Model } from 'sequelize';
+import todoSequelize from '../setup/database';
+import { UserAttributes } from '../../interfaces/db-models/UserAttributes';
 
 // Definiere das User Model
 class User extends Model<UserAttributes> implements UserAttributes {
@@ -44,13 +44,12 @@ User.init(
   {
     sequelize: todoSequelize,
     timestamps: false,
-    tableName: "User",
-    defaultScope: { attributes: { exclude: ["password"] } },
+    tableName: 'User',
+    defaultScope: { attributes: { exclude: ['password'] } },
     scopes: {
       allData: { attributes: { exclude: [] } },
-      
     },
-  }
+  },
 );
 
 export default User;

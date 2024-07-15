@@ -9,9 +9,9 @@ const todoSequelize = new Sequelize(
   DB_PASSWORD,
   {
     host: DB_HOST,
-    dialect: "mysql",
+    dialect: 'mysql',
     logging: false,
-  }
+  },
 );
 
 export default todoSequelize;

@@ -5,5 +5,3 @@ export interface UserAttributes {
   password: string;
   profileImgUrl?: string;
 }
-
-
