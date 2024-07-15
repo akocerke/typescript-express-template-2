@@ -3,7 +3,7 @@ name: Code Quality Checker
 on:
   push:
     branches:
-      - update-workflow
+      - main
   pull_request:
     branches:
       - main
