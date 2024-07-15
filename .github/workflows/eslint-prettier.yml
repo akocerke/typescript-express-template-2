@@ -1,0 +1,33 @@
+name: Code Quality Checker
+
+
+on:
+  push:
+    branches:
+      - update-workflow
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Codeprüfung mit eslint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Run eslint
+        run: npm run lint
+
+  prettier:
+    name: Formatierung mit prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Führe prettier zur Formatierung aus
+        run: npm run prettier:fix
+
+
