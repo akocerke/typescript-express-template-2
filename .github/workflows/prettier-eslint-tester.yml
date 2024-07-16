@@ -1,40 +1,47 @@
-name: Code Quality Checker
+name: Run MySQL Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
-  lint:
-    name: Codeprüfung mit ESLint
+  test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          npm install
-          npm list
-      - name: Show project directory
-        run: ls -l
-      - name: Run ESLint
-        run: npm run lint
+    services:
+      mysql:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         env:
-          CI: true
+          MYSQL_ROOT_PASSWORD: root1234
+          MYSQL_DATABASE: todo_app_test
 
-  prettier:
-    name: Formatierung mit Prettier
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21'
+
+      - name: Wait for MySQL to be ready
+        run: |
+          while ! mysqladmin ping -h 127.0.0.1 -uroot -proot1234 --silent; do
+            echo 'Waiting for MySQL to be ready...'
+            sleep 1
+          done
+
       - name: Install dependencies
         run: |
           npm install
-          npm list
-      - name: Show project directory
-        run: ls -l
-      - name: Führe Prettier zur Formatierung aus
-        run: npm run prettier
+
+      - name: Run Prettier
+        run: |
+          npm run prettier
+
+      - name: Run ESLint
+        run: |
+          npm run lint
+
+      - name: Run tests
+        run: npm run test
