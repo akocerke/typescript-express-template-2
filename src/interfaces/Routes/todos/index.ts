@@ -7,7 +7,7 @@ export interface IupdateTodoBody {
   todoId: number;
   newTask: string;
   newIsDone: boolean;
-  newDueDate: Date;
+  newDueDate: Date; //date
 }
 
 export interface IcreateTodoBody {
