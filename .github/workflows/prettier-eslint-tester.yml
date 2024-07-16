@@ -9,9 +9,19 @@ on:
       - main
 
 jobs:
-  lint-and-prettier:
-    name: Lint and Prettier
+  lint-and-test:
+    name: Lint and Test Express App
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ROOT_PASSWORD: root1234
+          MYSQL_DATABASE: todo_app_test
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,15 +29,25 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '21'
+          node-version: '14' # Anpassen der Node.js-Version an deine Anforderungen
 
       - name: Install dependencies
         run: npm install
 
+      - name: Wait for MySQL to be ready
+        run: |
+          while ! mysqladmin ping -h 127.0.0.1 -uroot -proot1234 --silent; do
+            echo 'Waiting for MySQL to be ready...'
+            sleep 1
+          done
+
       - name: Run Prettier
-        run: npx prettier --check .
+        run: npm run prettier -- --check .
 
       - name: Run ESLint
-        run: npx eslint . --ext .ts
+        run: npm run lint -- --ext .ts
         env:
           CI: true
+
+      - name: Run Tests (replace with your test command)
+        run: npm test
