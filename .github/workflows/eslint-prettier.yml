@@ -3,10 +3,10 @@ name: ESLint and Prettier
 on:
   push:
     branches:
-      - main  # Hier den Namen deiner Hauptentwicklungsbranch angeben, z.B. main oder master
+      - main  
   pull_request:
     branches:
-      - main  # Auch hier den Namen deiner Hauptentwicklungsbranch angeben
+      - main  
 
 jobs:
   eslint-prettier:
@@ -18,13 +18,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '21'  # Node-Version hier angeben, die du verwenden möchtest
+          node-version: '21'  
 
       - name: Install dependencies
-        run: npm install  # Befehl zum Installieren der Abhängigkeiten, könnte auch yarn sein
+        run: npm install  
 
       - name: ESLint check
-        run: npm run lint  # Befehl hier anpassen, je nachdem wie dein ESLint-Script in package.json definiert ist
+        run: npm run lint  
 
       - name: Prettier check
-        run: npm run format:check  # Befehl hier anpassen, je nachdem wie dein Prettier-Check in package.json definiert ist
+        run: npm run prettier
