@@ -1,13 +1,19 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Route} from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Route } from 'tsoa';
 import { StatusCodes } from 'http-status-codes';
 import TodoModel from '../database/models/TodoModel';
-import { IcreateTodoBody, IdeleteTodoBody, ImarkTodoBody, IupdateTodoBody } from '../interfaces/Routes/todos';
+import {
+  IcreateTodoBody,
+  IdeleteTodoBody,
+  ImarkTodoBody,
+  IupdateTodoBody,
+} from '../interfaces/Routes/todos';
 
 @Route('todos')
 export class TodoController extends Controller {
-
   @Get('byid')
-  public async getTodoById(@Path() todoId: number): Promise<{ todo: TodoModel }> {
+  public async getTodoById(
+    @Path() todoId: number,
+  ): Promise<{ todo: TodoModel }> {
     try {
       const todo = await TodoModel.findOne({ where: { id: todoId } });
       if (!todo) {
@@ -33,7 +39,9 @@ export class TodoController extends Controller {
   }
 
   @Put('mark')
-  public async markTodoDone(@Body() requestBody: ImarkTodoBody): Promise<{ updatedTodoId: number }> {
+  public async markTodoDone(
+    @Body() requestBody: ImarkTodoBody,
+  ): Promise<{ updatedTodoId: number }> {
     const { todoId, newIsDone } = requestBody;
 
     try {
@@ -52,7 +60,9 @@ export class TodoController extends Controller {
   }
 
   @Put('update')
-  public async updateTodo(@Body() requestBody: IupdateTodoBody): Promise<{ updatedTodoId: number }> {
+  public async updateTodo(
+    @Body() requestBody: IupdateTodoBody,
+  ): Promise<{ updatedTodoId: number }> {
     const { todoId, newTask, newIsDone, newDueDate } = requestBody;
 
     try {
@@ -78,7 +88,9 @@ export class TodoController extends Controller {
   }
 
   @Post('create')
-  public async createTodo(@Body() requestBody: IcreateTodoBody): Promise<{ todo: TodoModel }> {
+  public async createTodo(
+    @Body() requestBody: IcreateTodoBody,
+  ): Promise<{ todo: TodoModel }> {
     const { newTask, newIsDone, newDueDate, newUserId } = requestBody;
 
     try {
@@ -104,7 +116,9 @@ export class TodoController extends Controller {
   }
 
   @Delete('delete')
-  public async deleteTodo(@Body() requestBody: IdeleteTodoBody): Promise<{ deletedTodoId: number }> {
+  public async deleteTodo(
+    @Body() requestBody: IdeleteTodoBody,
+  ): Promise<{ deletedTodoId: number }> {
     const { todoId } = requestBody;
 
     try {

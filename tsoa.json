@@ -1,6 +1,5 @@
 {
-    "entryFile": "./src/index.ts",
-    "routesDir": "./src/controllers",
-    "noImplicitAdditionalProperties": "throw"
-  }
-  
+  "entryFile": "./src/index.ts",
+  "routesDir": "./src/controllers",
+  "noImplicitAdditionalProperties": "throw"
+}
