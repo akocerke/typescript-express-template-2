@@ -39,12 +39,15 @@
     "typescript-eslint": "^7.16.0"
   },
   "dependencies": {
+    "@tsoa/runtime": "^6.4.0",
     "@types/http-status-codes": "^1.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status-codes": "^2.3.0",
     "mysql2": "^3.10.3",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "tsoa": "^6.4.0",
+    "typescript": "^5.5.3"
   }
 }
