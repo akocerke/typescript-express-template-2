@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Path, Post, Put, Route } from 'tsoa';
 import { StatusCodes } from 'http-status-codes';
 import TodoModel from '../database/models/TodoModel';
+import { Todo } from '../interfaces/models/Todo';
 import {
   IcreateTodoBody,
   IdeleteTodoBody,
@@ -10,17 +11,15 @@ import {
 
 @Route('todos')
 export class TodoController extends Controller {
-  @Get('byid')
-  public async getTodoById(
-    @Path() todoId: number,
-  ): Promise<{ todo: TodoModel }> {
+  @Get('{todoId}')
+  public async getTodoById(@Path() todoId: number): Promise<{ todo: Todo }> {
     try {
       const todo = await TodoModel.findOne({ where: { id: todoId } });
       if (!todo) {
         this.setStatus(StatusCodes.NOT_FOUND);
         throw new Error(`Todo with id ${todoId} not found.`);
       }
-      return { todo };
+      return { todo: todo.get() as Todo };
     } catch (error) {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR);
       throw error;
@@ -28,10 +27,10 @@ export class TodoController extends Controller {
   }
 
   @Get('all')
-  public async getAllTodos(): Promise<TodoModel[]> {
+  public async getAllTodos(): Promise<Todo[]> {
     try {
       const todos = await TodoModel.findAll();
-      return todos;
+      return todos.map(todo => todo.get() as Todo);
     } catch (error) {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR);
       throw error;
@@ -39,9 +38,7 @@ export class TodoController extends Controller {
   }
 
   @Put('mark')
-  public async markTodoDone(
-    @Body() requestBody: ImarkTodoBody,
-  ): Promise<{ updatedTodoId: number }> {
+  public async markTodoDone(@Body() requestBody: ImarkTodoBody): Promise<{ updatedTodoId: number }> {
     const { todoId, newIsDone } = requestBody;
 
     try {
@@ -60,9 +57,7 @@ export class TodoController extends Controller {
   }
 
   @Put('update')
-  public async updateTodo(
-    @Body() requestBody: IupdateTodoBody,
-  ): Promise<{ updatedTodoId: number }> {
+  public async updateTodo(@Body() requestBody: IupdateTodoBody): Promise<{ updatedTodoId: number }> {
     const { todoId, newTask, newIsDone, newDueDate } = requestBody;
 
     try {
@@ -88,9 +83,7 @@ export class TodoController extends Controller {
   }
 
   @Post('create')
-  public async createTodo(
-    @Body() requestBody: IcreateTodoBody,
-  ): Promise<{ todo: TodoModel }> {
+  public async createTodo(@Body() requestBody: IcreateTodoBody): Promise<{ todo: Todo }> {
     const { newTask, newIsDone, newDueDate, newUserId } = requestBody;
 
     try {
@@ -108,7 +101,7 @@ export class TodoController extends Controller {
 
       const todo = await TodoModel.create(newTodo);
 
-      return { todo };
+      return { todo: todo.get() as Todo };
     } catch (error) {
       this.setStatus(StatusCodes.BAD_REQUEST);
       throw error;
@@ -116,9 +109,7 @@ export class TodoController extends Controller {
   }
 
   @Delete('delete')
-  public async deleteTodo(
-    @Body() requestBody: IdeleteTodoBody,
-  ): Promise<{ deletedTodoId: number }> {
+  public async deleteTodo(@Body() requestBody: IdeleteTodoBody): Promise<{ deletedTodoId: number }> {
     const { todoId } = requestBody;
 
     try {
