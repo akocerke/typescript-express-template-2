@@ -1,3 +1,5 @@
+// server.ts
+
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -7,14 +9,15 @@ import * as swaggerDocument from '../docs/swagger.json';
 
 // Initialisierung von express
 const app = express();
+
+// Middleware
 app.use(bodyParser.json());
-// Use for development
 app.use(cors());
 
 // Serve Swagger UI
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Register routes
-app.use('/v1', AppRouter); //v1
+app.use('/v1', AppRouter); // Hier wird der Präfix /v1 gesetzt
 
-export default app;
+export default app; // Exportiere app als Standardexport
