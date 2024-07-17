@@ -1,380 +1,346 @@
 {
-	"openapi": "3.0.0",
-	"components": {
-		"examples": {},
-		"headers": {},
-		"parameters": {},
-		"requestBodies": {},
-		"responses": {},
-		"schemas": {
-			"IbyIdResponse": {
-				"properties": {
-					"todoId": {
-						"type": "number",
-						"format": "double"
-					},
-					"userId": {
-						"type": "number",
-						"format": "double"
-					},
-					"newTask": {
-						"type": "string"
-					},
-					"newIsDone": {
-						"type": "boolean"
-					},
-					"newDueDate": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"todoId",
-					"userId",
-					"newTask",
-					"newIsDone",
-					"newDueDate"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Todo": {
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double"
-					},
-					"userId": {
-						"type": "number",
-						"format": "double"
-					},
-					"task": {
-						"type": "string"
-					},
-					"isDone": {
-						"type": "boolean"
-					},
-					"dueDate": {
-						"anyOf": [
-							{
-								"type": "string",
-								"format": "date-time"
-							},
-							{
-								"type": "string"
-							}
-						]
-					}
-				},
-				"required": [
-					"userId",
-					"task",
-					"dueDate",
-					"id"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ImarkTodoBody": {
-				"properties": {
-					"todoId": {
-						"type": "number",
-						"format": "double"
-					},
-					"newIsDone": {
-						"type": "boolean"
-					}
-				},
-				"required": [
-					"todoId",
-					"newIsDone"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"IupdateTodoBody": {
-				"properties": {
-					"todoId": {
-						"type": "number",
-						"format": "double"
-					},
-					"newTask": {
-						"type": "string"
-					},
-					"newIsDone": {
-						"type": "boolean"
-					},
-					"newDueDate": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"todoId",
-					"newTask",
-					"newIsDone",
-					"newDueDate"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"IcreateTodoBody": {
-				"properties": {
-					"newTask": {
-						"type": "string"
-					},
-					"newIsDone": {
-						"type": "boolean"
-					},
-					"newDueDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"newUserId": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"newTask",
-					"newIsDone",
-					"newDueDate",
-					"newUserId"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"IdeleteTodoBody": {
-				"properties": {
-					"todoId": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"todoId"
-				],
-				"type": "object",
-				"additionalProperties": false
-			}
-		},
-		"securitySchemes": {}
-	},
-	"info": {
-		"title": "typescript-express-template",
-		"version": "1.0.0",
-		"license": {
-			"name": "ISC"
-		},
-		"contact": {}
-	},
-	"paths": {
-		"/todos/byid": {
-			"get": {
-				"operationId": "GetTodoById",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/IbyIdResponse"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [
-					{
-						"in": "query",
-						"name": "todoId",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				]
-			}
-		},
-		"/todos/all": {
-			"get": {
-				"operationId": "GetAllTodos",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/Todo"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/todos/mark": {
-			"put": {
-				"operationId": "MarkTodoDone",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"updatedTodoId": {
-											"type": "number",
-											"format": "double"
-										}
-									},
-									"required": [
-										"updatedTodoId"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/ImarkTodoBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/todos/update": {
-			"put": {
-				"operationId": "UpdateTodo",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"updatedTodoId": {
-											"type": "number",
-											"format": "double"
-										}
-									},
-									"required": [
-										"updatedTodoId"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/IupdateTodoBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/todos/create": {
-			"post": {
-				"operationId": "CreateTodo",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"todo": {
-											"$ref": "#/components/schemas/Todo"
-										}
-									},
-									"required": [
-										"todo"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/IcreateTodoBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/todos/delete": {
-			"delete": {
-				"operationId": "DeleteTodo",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"deletedTodoId": {
-											"type": "number",
-											"format": "double"
-										}
-									},
-									"required": [
-										"deletedTodoId"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/IdeleteTodoBody"
-							}
-						}
-					}
-				}
-			}
-		}
-	},
-	"servers": [
-		{
-			"url": "/v1/"
-		}
-	]
+  "openapi": "3.0.0",
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "IbyIdResponse": {
+        "properties": {
+          "todoId": {
+            "type": "number",
+            "format": "double"
+          },
+          "userId": {
+            "type": "number",
+            "format": "double"
+          },
+          "newTask": {
+            "type": "string"
+          },
+          "newIsDone": {
+            "type": "boolean"
+          },
+          "newDueDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["todoId", "userId", "newTask", "newIsDone", "newDueDate"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Todo": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "userId": {
+            "type": "number",
+            "format": "double"
+          },
+          "task": {
+            "type": "string"
+          },
+          "isDone": {
+            "type": "boolean"
+          },
+          "dueDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": ["userId", "task", "dueDate", "id"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ImarkTodoBody": {
+        "properties": {
+          "todoId": {
+            "type": "number",
+            "format": "double"
+          },
+          "newIsDone": {
+            "type": "boolean"
+          }
+        },
+        "required": ["todoId", "newIsDone"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "IupdateTodoBody": {
+        "properties": {
+          "todoId": {
+            "type": "number",
+            "format": "double"
+          },
+          "newTask": {
+            "type": "string"
+          },
+          "newIsDone": {
+            "type": "boolean"
+          },
+          "newDueDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["todoId", "newTask", "newIsDone", "newDueDate"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "IcreateTodoBody": {
+        "properties": {
+          "newTask": {
+            "type": "string"
+          },
+          "newIsDone": {
+            "type": "boolean"
+          },
+          "newDueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "newUserId": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["newTask", "newIsDone", "newDueDate", "newUserId"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "IdeleteTodoBody": {
+        "properties": {
+          "todoId": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["todoId"],
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {}
+  },
+  "info": {
+    "title": "typescript-express-template",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "contact": {}
+  },
+  "paths": {
+    "/todos/byid": {
+      "get": {
+        "operationId": "GetTodoById",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IbyIdResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "todoId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/todos/all": {
+      "get": {
+        "operationId": "GetAllTodos",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Todo"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/todos/mark": {
+      "put": {
+        "operationId": "MarkTodoDone",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "updatedTodoId": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": ["updatedTodoId"],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImarkTodoBody"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todos/update": {
+      "put": {
+        "operationId": "UpdateTodo",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "updatedTodoId": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": ["updatedTodoId"],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IupdateTodoBody"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todos/create": {
+      "post": {
+        "operationId": "CreateTodo",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "todo": {
+                      "$ref": "#/components/schemas/Todo"
+                    }
+                  },
+                  "required": ["todo"],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IcreateTodoBody"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todos/delete": {
+      "delete": {
+        "operationId": "DeleteTodo",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "deletedTodoId": {
+                      "type": "number",
+                      "format": "double"
+                    }
+                  },
+                  "required": ["deletedTodoId"],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdeleteTodoBody"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/v1/"
+    }
+  ]
 }
