@@ -38,7 +38,9 @@ export class TodoController extends Controller {
   }
 
   @Put('mark')
-  public async markTodoDone(@Body() requestBody: ImarkTodoBody): Promise<{ updatedTodoId: number }> {
+  public async markTodoDone(
+    @Body() requestBody: ImarkTodoBody,
+  ): Promise<{ updatedTodoId: number }> {
     const { todoId, newIsDone } = requestBody;
 
     try {
@@ -57,7 +59,9 @@ export class TodoController extends Controller {
   }
 
   @Put('update')
-  public async updateTodo(@Body() requestBody: IupdateTodoBody): Promise<{ updatedTodoId: number }> {
+  public async updateTodo(
+    @Body() requestBody: IupdateTodoBody,
+  ): Promise<{ updatedTodoId: number }> {
     const { todoId, newTask, newIsDone, newDueDate } = requestBody;
 
     try {
@@ -83,7 +87,9 @@ export class TodoController extends Controller {
   }
 
   @Post('create')
-  public async createTodo(@Body() requestBody: IcreateTodoBody): Promise<{ todo: Todo }> {
+  public async createTodo(
+    @Body() requestBody: IcreateTodoBody,
+  ): Promise<{ todo: Todo }> {
     const { newTask, newIsDone, newDueDate, newUserId } = requestBody;
 
     try {
@@ -109,7 +115,9 @@ export class TodoController extends Controller {
   }
 
   @Delete('delete')
-  public async deleteTodo(@Body() requestBody: IdeleteTodoBody): Promise<{ deletedTodoId: number }> {
+  public async deleteTodo(
+    @Body() requestBody: IdeleteTodoBody,
+  ): Promise<{ deletedTodoId: number }> {
     const { todoId } = requestBody;
 
     try {
