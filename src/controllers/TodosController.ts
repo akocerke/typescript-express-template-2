@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Route } from 'tsoa';
+import { Body, Controller, Delete, Get, Post, Put, Query, Route } from 'tsoa';
 import { StatusCodes } from 'http-status-codes';
 import TodoModel from '../database/models/TodoModel';
 import { Todo } from '../interfaces/models/Todo';
@@ -7,19 +7,31 @@ import {
   IdeleteTodoBody,
   ImarkTodoBody,
   IupdateTodoBody,
+  IbyIdResponse,
 } from '../interfaces/Routes/todos';
 
 @Route('todos')
 export class TodoController extends Controller {
-  @Get('{todoId}')
-  public async getTodoById(@Path() todoId: number): Promise<{ todo: Todo }> {
+  @Get('/byid')
+  public async getTodoById(@Query() todoId: number): Promise<IbyIdResponse> {
     try {
       const todo = await TodoModel.findOne({ where: { id: todoId } });
+
       if (!todo) {
         this.setStatus(StatusCodes.NOT_FOUND);
         throw new Error(`Todo with id ${todoId} not found.`);
       }
-      return { todo: todo.get() as Todo };
+
+      // Convert dueDate from string to Date
+      const newDueDate = new Date(todo.dueDate);
+
+      return {
+        todoId: todo.id,
+        userId: todo.userId,
+        newTask: todo.task,
+        newIsDone: todo.isDone,
+        newDueDate: newDueDate,
+      };
     } catch (error) {
       this.setStatus(StatusCodes.INTERNAL_SERVER_ERROR);
       throw error;

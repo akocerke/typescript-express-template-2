@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Serve Swagger UI
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Register routes
 app.use('/v1', AppRouter); // Hier wird der Präfix /v1 gesetzt

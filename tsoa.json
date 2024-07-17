@@ -7,6 +7,6 @@
     "specVersion": 3
   },
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": "/v1/"
   }
 }

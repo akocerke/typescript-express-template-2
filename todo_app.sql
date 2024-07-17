@@ -25,8 +25,6 @@ CREATE TABLE todos (
     task VARCHAR(255) NOT NULL,
     isDone BOOLEAN NOT NULL DEFAULT FALSE,
     dueDate DATE NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES user(id) ON DELETE CASCADE
 );
 
@@ -68,4 +66,4 @@ INSERT INTO todos (userId, task, isDone, dueDate) VALUES
 
 
 select*from todos;
-select*from users;
+select*from user;

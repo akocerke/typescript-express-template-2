@@ -1,3 +1,11 @@
+export interface IbyIdResponse {
+  todoId: number;
+  userId: number;
+  newTask: string;
+  newIsDone: boolean;
+  newDueDate: Date;
+}
+
 export interface ImarkTodoBody {
   todoId: number;
   newIsDone: boolean;

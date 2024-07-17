@@ -1,96 +1,134 @@
 import { Router } from 'express';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import TodoModel from '../../database/models/TodoModel';
+import { StatusCodes } from 'http-status-codes';
 import {
   IcreateTodoBody,
   IdeleteTodoBody,
   ImarkTodoBody,
   IupdateTodoBody,
 } from '../../interfaces/Routes/todos';
+import { TodoController } from '../../controllers/TodosController';
 
 const TodosRouter = Router();
 
-// GET REQUESTS
-// /v1/todos/bytodoid
+// GET Todo byid
 TodosRouter.get('/byid', async (req, res) => {
+  const controller = new TodoController();
   const todoId = parseInt(req.query.todoId as string);
-
-  if (!todoId) {
-    res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
-    return;
-  }
-  const todo = await TodoModel.findOne({ where: { id: todoId } });
-
-  res.status(StatusCodes.OK).json({ todo });
+  const result = await controller.getTodoById(todoId);
+  console.log(`ToDo mit der ID: ${todoId} gefunden`, result);
+  res.status(StatusCodes.OK).json(result);
 });
 
-// Alle Todos von einer UserId
-
+// GET Alle Todos
 TodosRouter.get('/all', async (req, res) => {
-  const todos = await TodoModel.findAll();
-  res.status(StatusCodes.OK).send(todos);
+  const controller = new TodoController();
+  const result = await controller.getAllTodos();
+  console.log('Alle Todos gefunden:', result);
+  res.status(StatusCodes.OK).json(result);
 });
 
-// PUT REQUESTS
+// PUT Todo mark as done or not done
 TodosRouter.put('/mark', async (req, res) => {
+  const controller = new TodoController();
+
   try {
     const { todoId, newIsDone } = req.body as ImarkTodoBody;
 
-    if (!todoId) throw Error('keine User Id');
+    if (!todoId) throw new Error('keine User Id');
 
-    await TodoModel.update({ isDone: newIsDone }, { where: { id: todoId } });
-
-    res.status(StatusCodes.OK).json({ updatedTodoId: todoId });
+    // Die Controller-Methode aufrufen und das Ergebnis abwarten
+    const result = await controller.markTodoDone({ todoId, newIsDone });
+    console.log(
+      `Todo ID: ${todoId} => ${newIsDone ? 'erledigt markiert' : 'unerledigt markiert'}`,
+    );
+    res.status(StatusCodes.OK).json(result);
   } catch (e) {
-    res.status(StatusCodes.BAD_REQUEST).send(e);
+    if (e instanceof Error) {
+      res.status(StatusCodes.BAD_REQUEST);
+    } else {
+      res.status(StatusCodes.BAD_REQUEST);
+    }
   }
 });
 
+// PUT Todo aktualisieren
 TodosRouter.put('/update', async (req, res) => {
-  const { todoId, newTask, newIsDone, newDueDate } =
-    req.body as IupdateTodoBody;
+  const controller = new TodoController();
 
-  await TodoModel.update(
-    {
-      task: newTask,
-      isDone: newIsDone,
-      dueDate: newDueDate,
-    },
-    { where: { id: todoId } },
-  );
-
-  res.status(StatusCodes.OK).json({ updatedTodoId: todoId });
-});
-
-// POST REQUESTS
-TodosRouter.post('/create', async (req, res) => {
-  const { newTask, newIsDone, newDueDate, newUserId } =
-    req.body as IcreateTodoBody;
-
-  console.log('Here we are', newTask, newIsDone, newDueDate, newUserId);
-  if (!newTask || !newDueDate || !newUserId) {
-    throw ReferenceError('One of my required Parameters is not defined');
+  try {
+    const requestBody: IupdateTodoBody = req.body;
+    // Die Controller-Methode aufrufen und das Ergebnis abwarten
+    const result = await controller.updateTodo(requestBody);
+    // Dynamisches console.log
+    console.log(
+      `Todo ID: ${requestBody.todoId} wurde aktualisiert. Neue Aufgabe: ${requestBody.newTask}, Status: ${requestBody.newIsDone ? 'erledigt' : 'unerledigt'}, Fälligkeitsdatum: ${requestBody.newDueDate}`,
+    );
+    res.status(StatusCodes.OK).json(result);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(StatusCodes.BAD_REQUEST).send(e.message);
+    } else {
+      res.status(StatusCodes.BAD_REQUEST).send('Unknown error occurred');
+    }
   }
-
-  const newTodo = {
-    task: newTask,
-    isDone: newIsDone,
-    dueDate: new Date(newDueDate),
-    userId: newUserId,
-  };
-
-  const todo = await TodoModel.create(newTodo);
-
-  res.status(StatusCodes.OK).json({ todo: todo });
 });
 
-// DELETE REQUEST
+// POST Todo erstellen
+TodosRouter.post('/create', async (req, res) => {
+  const controller = new TodoController();
+
+  try {
+    const requestBody: IcreateTodoBody = req.body;
+
+    if (
+      !requestBody.newTask ||
+      !requestBody.newDueDate ||
+      !requestBody.newUserId
+    ) {
+      throw new ReferenceError('One of my required Parameters is not defined');
+    }
+
+    // Die Controller-Methode aufrufen und das Ergebnis abwarten
+    const result = await controller.createTodo(requestBody);
+
+    // Dynamisches console.log
+    console.log(
+      `Neues Todo erstellt: Aufgabe: ${requestBody.newTask}, Status: ${requestBody.newIsDone ? 'erledigt' : 'unerledigt'}, Fälligkeitsdatum: ${requestBody.newDueDate}, Benutzer-ID: ${requestBody.newUserId}`,
+    );
+
+    res.status(StatusCodes.OK).json(result);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(StatusCodes.BAD_REQUEST).send(e.message);
+    } else {
+      res.status(StatusCodes.BAD_REQUEST).send('Unknown error occurred');
+    }
+  }
+});
+
+// DELETE Todo löschen
 TodosRouter.delete('/delete', async (req, res) => {
-  const { todoId } = req.body as IdeleteTodoBody;
+  const controller = new TodoController();
 
-  await TodoModel.destroy({ where: { id: todoId } });
+  try {
+    const requestBody: IdeleteTodoBody = req.body;
 
-  res.status(StatusCodes.OK).json({ deletedTodosId: todoId });
+    // Die Controller-Methode aufrufen und das Ergebnis abwarten
+    const result = await controller.deleteTodo(requestBody);
+
+    // Dynamisches console.log
+    console.log(
+      `Todo mit ID ${requestBody.todoId} wurde erfolgreich gelöscht.`,
+    );
+
+    res.status(StatusCodes.OK).json(result);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(StatusCodes.BAD_REQUEST).send(e.message);
+    } else {
+      res.status(StatusCodes.BAD_REQUEST).send('Unknown error occurred');
+    }
+  }
 });
 
 export default TodosRouter;
