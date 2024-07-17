@@ -10,8 +10,7 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "tsoa:gen": "tsoa routes && tsoa swagger"
+    "prettier:fix": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
